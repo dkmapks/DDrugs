@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Druglord Tycoon</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+</head>
+<body>
+  <h1>Druglord Tycoon</h1>
+  <div id="game-container">
+    <!-- Interfejs gry -->
+    <div id="status">
+      <p>Gotówka: $<span id="cash">1000</span></p>
+      <p>BTC: <span id="btc">0.00</span></p>
+      <p>Majątek: $<span id="wealth">1000</span></p>
+    </div>
+    <div id="actions">
+      <button onclick="buyDrugs()">Kup narkotyki</button>
+      <button onclick="sellDrugs()">Sprzedaj narkotyki</button>
+      <button onclick="openCryptoWallet()">Portfel BTC</button>
+      <button onclick="buyProperty()">Kup nieruchomość</button>
+      <button onclick="buyCar()">Kup samochód</button>
+      <button onclick="viewInventory()">Ekwipunek</button>
+      <button onclick="saveGame()">Zapisz grę</button>
+      <button onclick="loadGame()">Wczytaj grę</button>
+    </div>
+    <div id="mod-menu" style="display:none;">
+      <h2>Mod Menu</h2>
+      <button onclick="addMoney()">Dodaj $10,000</button>
+      <button onclick="disablePolice()">Wyłącz policję</button>
+      <button onclick="maxDrugPrices()">Ceny maksymalne</button>
+      <button onclick="resetGame()">Reset gry</button>
+      <button onclick="addBTC()">Dodaj 1 BTC</button>
+      <button onclick="godMode()">Tryb nieśmiertelny</button>
+      <button onclick="teleport()">Przenieś do miasta</button>
+      <button onclick="unlockProperties()">Odblokuj nieruchomości</button>
+      <button onclick="debugEvents()">Wydarzenia debugowe</button>
+      <button onclick="showGodUI()">God Mode UI</button>
+    </div>
+    <input type="password" id="mod-code" placeholder="Wpisz kod" />
+    <button onclick="checkModCode()">Aktywuj Mod Menu</button>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
