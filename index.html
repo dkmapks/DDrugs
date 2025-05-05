@@ -42,6 +42,22 @@
     <input type="password" id="mod-code" placeholder="Wpisz kod" />
     <button onclick="checkModCode()">Aktywuj Mod Menu</button>
   </div>
+
+  <!-- Ikona telefonu -->
+  <div id="phone-icon" onclick="togglePhone()">📱</div>
+
+  <!-- Interfejs telefonu -->
+  <div id="phone-interface" style="display:none;">
+    <div class="app-icon" onclick="openApp('crypto')">CryptoExchange</div>
+    <div class="app-icon" onclick="openApp('missions')">Zlecenia</div>
+    <div class="app-icon" onclick="openApp('storage')">Magazyn</div>
+    <div class="app-icon" onclick="openApp('lab')">Laboratorium</div>
+    <div class="app-icon" onclick="openApp('contacts')">Kontakty</div>
+    <div class="app-icon" onclick="openApp('blackmarket')">Czarny Rynek</div>
+    <div class="app-icon" onclick="openApp('bank')">Bank</div>
+    <div class="app-icon" onclick="openApp('profile')">Profil</div>
+  </div>
+
   <script src="game.js"></script>
 </body>
 </html>
