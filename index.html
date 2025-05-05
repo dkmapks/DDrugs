@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DDrugs Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="main">
+        <h1>DDrugs: Darknet Marketplace Simulator</h1>
+        <nav>
+            <button onclick="showSection('shop')">Sklep</button>
+            <button onclick="showSection('wallet')">Portfel</button>
+            <button onclick="showSection('suppliers')">Dostawcy</button>
+            <button onclick="showSection('warehouse')">Magazyn</button>
+            <button onclick="showSection('clients')">Klienci</button>
+            <button onclick="showSection('dealers')">Żydzi</button>
+            <button onclick="enterModMenu()">Premium</button>
+        </nav>
+
+        <section id="shop" class="section">
+            <h2>Twój Sklep</h2>
+            <div id="prices"></div>
+            <button onclick="simulateClientBuy()">Symuluj klienta</button>
+        </section>
+
+        <section id="wallet" class="section">
+            <h2>Portfel</h2>
+            <p>Saldo: <span id="wallet_balance">1000</span> $</p>
+            <p>Żetony: <span id="tokens">100</span></p>
+            <p>Poziom: <span id="level">1</span></p>
+        </section>
+
+        <section id="suppliers" class="section">
+            <h2>Oferty dostawców</h2>
+            <div id="suppliers_list"></div>
+        </section>
+
+        <section id="warehouse" class="section">
+            <h2>Magazyn</h2>
+            <div id="warehouse_list"></div>
+        </section>
+
+        <section id="clients" class="section">
+            <h2>Klienci</h2>
+            <div id="client_offer"></div>
+        </section>
+
+        <section id="dealers" class="section">
+            <h2>Żydzi - hurtownicy</h2>
+            <div id="dealer_offers"></div>
+        </section>
+
+        <section id="modmenu" class="section">
+            <h2>Mod Menu (7432)</h2>
+            <button onclick="modAddCash()">+1000$</button>
+            <button onclick="modAddTokens()">+100 żetonów</button>
+            <button onclick="modAddAllDrugs()">Dodaj towar</button>
+            <button onclick="modMaxLevel()">Ulepsz konto</button>
+            <button onclick="modProtection()">Dodaj ochronę</button>
+            <button onclick="saveGame()">Zapisz grę</button>
+        </section>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
