@@ -1,63 +1,65 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Druglord Tycoon</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="manifest" href="manifest.json" />
+  <meta charset="UTF-8">
+  <title>DDrugs 2.0</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Druglord Tycoon</h1>
-  <div id="game-container">
-    <!-- Interfejs gry -->
-    <div id="status">
-      <p>Gotówka: $<span id="cash">1000</span></p>
-      <p>BTC: <span id="btc">0.00</span></p>
-      <p>Majątek: $<span id="wealth">1000</span></p>
-    </div>
-    <div id="actions">
-      <button onclick="buyDrugs()">Kup narkotyki</button>
-      <button onclick="sellDrugs()">Sprzedaj narkotyki</button>
-      <button onclick="openCryptoWallet()">Portfel BTC</button>
-      <button onclick="buyProperty()">Kup nieruchomość</button>
-      <button onclick="buyCar()">Kup samochód</button>
-      <button onclick="viewInventory()">Ekwipunek</button>
-      <button onclick="saveGame()">Zapisz grę</button>
-      <button onclick="loadGame()">Wczytaj grę</button>
-    </div>
-    <div id="mod-menu" style="display:none;">
-      <h2>Mod Menu</h2>
-      <button onclick="addMoney()">Dodaj $10,000</button>
-      <button onclick="disablePolice()">Wyłącz policję</button>
-      <button onclick="maxDrugPrices()">Ceny maksymalne</button>
-      <button onclick="resetGame()">Reset gry</button>
-      <button onclick="addBTC()">Dodaj 1 BTC</button>
-      <button onclick="godMode()">Tryb nieśmiertelny</button>
-      <button onclick="teleport()">Przenieś do miasta</button>
-      <button onclick="unlockProperties()">Odblokuj nieruchomości</button>
-      <button onclick="debugEvents()">Wydarzenia debugowe</button>
-      <button onclick="showGodUI()">God Mode UI</button>
-    </div>
-    <input type="password" id="mod-code" placeholder="Wpisz kod" />
-    <button onclick="checkModCode()">Aktywuj Mod Menu</button>
-  </div>
+  <h1>DDrugs 2.0</h1>
 
-  <!-- Ikona telefonu -->
-  <div id="phone-icon" onclick="togglePhone()">📱</div>
+  <section id="stats">
+    <p>Zł: <span id="cash">1000</span></p>
+    <p>BTC: <span id="btc">0.000</span></p>
+    <p>Magazyn: <span id="storageUsed">0</span>/<span id="storageLimit">50</span>g</p>
+  </section>
 
-  <!-- Interfejs telefonu -->
-  <div id="phone-interface" style="display:none;">
-    <div class="app-icon" onclick="openApp('crypto')">CryptoExchange</div>
-    <div class="app-icon" onclick="openApp('missions')">Zlecenia</div>
-    <div class="app-icon" onclick="openApp('storage')">Magazyn</div>
-    <div class="app-icon" onclick="openApp('lab')">Laboratorium</div>
-    <div class="app-icon" onclick="openApp('contacts')">Kontakty</div>
-    <div class="app-icon" onclick="openApp('blackmarket')">Czarny Rynek</div>
-    <div class="app-icon" onclick="openApp('bank')">Bank</div>
-    <div class="app-icon" onclick="openApp('profile')">Profil</div>
-  </div>
+  <h2>Magazyn</h2>
+  <div id="warehouseOptions"></div>
 
-  <script src="game.js"></script>
+  <h2>Posiadane narkotyki</h2>
+  <div id="inventory"></div>
+
+  <h2>Ręczne kupowanie</h2>
+  <input id="buyDrug" placeholder="nazwa narkotyku">
+  <input id="buyAmount" type="number" placeholder="ilość">
+  <input id="buyPrice" type="number" placeholder="cena za gram/szt.">
+  <button onclick="manualBuy()">Kup</button>
+
+  <h2>Ręczna sprzedaż</h2>
+  <input id="sellDrug" placeholder="nazwa narkotyku">
+  <input id="sellAmount" type="number" placeholder="ilość">
+  <input id="sellPrice" type="number" placeholder="cena za gram/szt.">
+  <button onclick="manualSell()">Sprzedaj</button>
+
+  <h2>Oferty dostawców</h2>
+  <div id="supplierOffers"></div>
+
+  <h2>Klienci</h2>
+  <div id="clients"></div>
+
+  <h2>BTC</h2>
+  <input type="number" id="btcAmount" placeholder="Kwota BTC">
+  <button onclick="btc.deposit()">Wpłać</button>
+  <button onclick="btc.withdraw()">Wypłać</button>
+
+  <h2>Pracownicy</h2>
+  <select id="workerName"></select>
+  <input id="workerDrug" placeholder="narkotyk">
+  <input type="number" id="workerAmount" placeholder="ilość">
+  <input type="number" id="workerPrice" placeholder="cena za gram">
+  <button onclick="assignToWorker()">Daj towar</button>
+  <div id="workersList"></div>
+
+  <h2>Podróże</h2>
+  <div id="travel"></div>
+
+  <h2>Zapis gry</h2>
+  <button onclick="saveGame()">Zapisz grę</button>
+  <button onclick="loadGame()">Wczytaj grę</button>
+
+  <script src="script.js"></script>
 </body>
 </html>
