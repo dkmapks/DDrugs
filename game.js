@@ -1,114 +1,111 @@
-let game = {
-  cash: 1000,
-  btc: 0.000,
-  storageLimit: 50,
-  inventory: {},
-};
+let cash = 1000;
+let btcBalance = 0;
+let storageUsed = 0;
+let storageLimit = 50;
+let inventory = {};
 
-function updateStats() {
-  document.getElementById("cash").innerText = game.cash.toFixed(2);
-  document.getElementById("btc").innerText = game.btc.toFixed(3);
-  const used = Object.values(game.inventory).reduce((a, b) => a + b, 0);
-  document.getElementById("storageUsed").innerText = used;
-  document.getElementById("storageLimit").innerText = game.storageLimit;
-  updateInventory();
+const drugs = [
+  { name: "DFF", buyMin: 3, buyMax: 15, sellMin: 5, sellMax: 25 }
+];
+
+function updateUI() {
+  document.getElementById("cash").textContent = cash.toFixed(2);
+  document.getElementById("btc").textContent = btcBalance.toFixed(3);
+  document.getElementById("storageUsed").textContent = storageUsed;
+  document.getElementById("storageLimit").textContent = storageLimit;
+
+  const invDiv = document.getElementById("inventory");
+  invDiv.innerHTML = "";
+  for (let drug in inventory) {
+    invDiv.innerHTML += `<p>${drug}: ${inventory[drug]}</p>`;
+  }
+
+  const offersDiv = document.getElementById("supplierOffers");
+  offersDiv.innerHTML = "";
+  drugs.forEach(drug => {
+    let price = (Math.random() * (drug.buyMax - drug.buyMin) + drug.buyMin).toFixed(2);
+    offersDiv.innerHTML += `<p>${drug.name}: ${price} zł/g <button onclick="buyDrug('${drug.name}', ${price})">Kup 1g</button></p>`;
+  });
 }
 
-function updateInventory() {
-  const inv = document.getElementById("inventory");
-  inv.innerHTML = "";
-  for (let drug in game.inventory) {
-    inv.innerHTML += `<p>${drug}: ${game.inventory[drug]}g</p>`;
+function buyDrug(name, price) {
+  if (cash >= price && storageUsed < storageLimit) {
+    cash -= price;
+    inventory[name] = (inventory[name] || 0) + 1;
+    storageUsed += 1;
+    updateUI();
   }
 }
 
 function manualBuy() {
   const name = document.getElementById("buyDrug").value;
-  const amount = parseFloat(document.getElementById("buyAmount").value);
+  const amount = parseInt(document.getElementById("buyAmount").value);
   const price = parseFloat(document.getElementById("buyPrice").value);
-  const cost = amount * price;
+  if (!name || isNaN(amount) || isNaN(price)) return;
 
-  if (cost <= game.cash && (getStorageUsed() + amount <= game.storageLimit)) {
-    game.cash -= cost;
-    game.inventory[name] = (game.inventory[name] || 0) + amount;
-    updateStats();
-  } else {
-    alert("Za mało kasy lub miejsca!");
+  const totalCost = price * amount;
+  if (cash >= totalCost && storageUsed + amount <= storageLimit) {
+    cash -= totalCost;
+    inventory[name] = (inventory[name] || 0) + amount;
+    storageUsed += amount;
+    updateUI();
   }
 }
 
 function manualSell() {
   const name = document.getElementById("sellDrug").value;
-  const amount = parseFloat(document.getElementById("sellAmount").value);
+  const amount = parseInt(document.getElementById("sellAmount").value);
   const price = parseFloat(document.getElementById("sellPrice").value);
-  const profit = amount * price;
+  if (!name || isNaN(amount) || isNaN(price)) return;
 
-  if ((game.inventory[name] || 0) >= amount) {
-    game.inventory[name] -= amount;
-    game.cash += profit;
-    if (game.inventory[name] <= 0) delete game.inventory[name];
-    updateStats();
-  } else {
-    alert("Nie masz tyle towaru!");
+  if (inventory[name] >= amount) {
+    cash += amount * price;
+    inventory[name] -= amount;
+    storageUsed -= amount;
+    if (inventory[name] <= 0) delete inventory[name];
+    updateUI();
   }
 }
 
-function getStorageUsed() {
-  return Object.values(game.inventory).reduce((a, b) => a + b, 0);
-}
-
-// DFF – losowy zakup/sprzedaż
-function generateDFFOffer() {
-  const buy = +(Math.random() * 12 + 3).toFixed(2); // 3–15 zł
-  const sell = +(Math.random() * 20 + 5).toFixed(2); // 5–25 zł
-  const offers = document.getElementById("supplierOffers");
-  offers.innerHTML = `<p>DFF – Kup za ${buy} zł/g <button onclick="buyDFF(${buy})">Kup 1g</button></p>`;
-  const clients = document.getElementById("clients");
-  clients.innerHTML = `<p>DFF – Sprzedaj za ${sell} zł/g <button onclick="sellDFF(${sell})">Sprzedaj 1g</button></p>`;
-}
-
-function buyDFF(price) {
-  if (game.cash >= price && getStorageUsed() + 1 <= game.storageLimit) {
-    game.cash -= price;
-    game.inventory["DFF"] = (game.inventory["DFF"] || 0) + 1;
-    updateStats();
-  } else {
-    alert("Za mało kasy lub miejsca!");
+const btc = {
+  deposit() {
+    const amount = parseFloat(document.getElementById("btcAmount").value);
+    if (!isNaN(amount) && cash >= amount) {
+      cash -= amount;
+      btcBalance += amount / 100000; // np. 1 BTC = 100000 zł
+      updateUI();
+    }
+  },
+  withdraw() {
+    const amount = parseFloat(document.getElementById("btcAmount").value);
+    if (!isNaN(amount) && btcBalance >= amount / 100000) {
+      btcBalance -= amount / 100000;
+      cash += amount;
+      updateUI();
+    }
   }
-}
-
-function sellDFF(price) {
-  if ((game.inventory["DFF"] || 0) >= 1) {
-    game.inventory["DFF"] -= 1;
-    game.cash += price;
-    if (game.inventory["DFF"] <= 0) delete game.inventory["DFF"];
-    updateStats();
-  } else {
-    alert("Nie masz DFF!");
-  }
-}
+};
 
 function saveGame() {
-  localStorage.setItem("ddrugs_save", JSON.stringify(game));
+  const saveData = {
+    cash, btcBalance, inventory, storageUsed
+  };
+  localStorage.setItem("ddrugs2Save", JSON.stringify(saveData));
   alert("Gra zapisana!");
 }
 
 function loadGame() {
-  const data = localStorage.getItem("ddrugs_save");
+  const data = JSON.parse(localStorage.getItem("ddrugs2Save"));
   if (data) {
-    game = JSON.parse(data);
-    updateStats();
+    cash = data.cash;
+    btcBalance = data.btcBalance;
+    inventory = data.inventory;
+    storageUsed = data.storageUsed;
+    updateUI();
     alert("Gra wczytana!");
   } else {
     alert("Brak zapisu gry.");
   }
 }
 
-setInterval(() => {
-  generateDFFOffer();
-}, 10000); // Odświeżanie ofert DFF co 10s
-
-updateStats();
-generateDFFOffer();
-
-// Można tu dodać kod dla btc, pracowników, podróży itd.
+updateUI();
